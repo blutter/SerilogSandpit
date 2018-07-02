@@ -10,6 +10,7 @@
     <PackageReference Include="Serilog" Version="2.6.0"/>
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1"/>
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1"/>
+    <PackageReference Include="Serilog.Sinks.AzureAnalytics" Version="2.3.0"/>
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2"/>
