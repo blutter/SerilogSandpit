@@ -1,0 +1,72 @@
+#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+//////////////////////////////////////////////////////////////////////
+// ARGUMENTS
+//////////////////////////////////////////////////////////////////////
+
+var target = Argument("target", "Default");
+var configuration = Argument("configuration", "Release");
+
+//////////////////////////////////////////////////////////////////////
+// PREPARATION
+//////////////////////////////////////////////////////////////////////
+
+// Define directories.
+var buildDir = Directory("./output") + Directory(configuration);
+
+//////////////////////////////////////////////////////////////////////
+// TASKS
+//////////////////////////////////////////////////////////////////////
+
+Task("Clean")
+    .Does(() =>
+{
+    CleanDirectory(buildDir);
+});
+
+Task("Restore")
+    .IsDependentOn("Clean")
+    .Does(() =>
+{
+  DotNetCoreRestore();
+});
+
+Task("Build")
+    .IsDependentOn("Restore")
+    .Does(() =>
+{
+  DotNetCoreBuild(".",
+    new DotNetCoreBuildSettings()
+    {
+      Configuration = configuration
+    });
+});
+
+Task("Test")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+  var testProjects = GetFiles("./*.Test/*.csproj");
+  foreach (var testProject in testProjects)
+  {
+    DotNetCoreTest(
+      testProject.FullPath,
+      new DotNetCoreTestSettings() 
+      {
+        Configuration = configuration,
+        NoBuild = true
+      });
+  }
+});
+
+//////////////////////////////////////////////////////////////////////
+// TASK TARGETS
+//////////////////////////////////////////////////////////////////////
+
+Task("Default")
+  .IsDependentOn("Test");
+
+//////////////////////////////////////////////////////////////////////
+// EXECUTION
+//////////////////////////////////////////////////////////////////////
+
+RunTarget(target);
