@@ -3,4 +3,4 @@ version: 0.2
 phases:
   build:
     commands:
-      - pwsh -Command "& {$VerbosePreference='continue'; ./build.ps1}"
+      - pwsh -Command "& {$VerbosePreference=\'continue\'; ./build.ps1}"
